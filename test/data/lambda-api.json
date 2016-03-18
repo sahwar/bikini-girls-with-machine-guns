@@ -1,0 +1,19 @@
+{
+  "payload": {
+    "url": "http://www.google.com",
+    "screenshots": {
+      "args": {
+        "format": "jpeg",
+        "quality": "25"
+      },
+      "success": true
+    },
+    "viewport": {
+      "width": 920,
+      "height": 580
+    },
+    "har": true
+  },
+  "successTopic": "arn:aws:sns:eu-west-1:110440800955:bikini-girls-with-machine-guns-success-development",
+  "errorTopic": "arn:aws:sns:eu-west-1:110440800955:bikini-girls-with-machine-guns-error-development"
+}

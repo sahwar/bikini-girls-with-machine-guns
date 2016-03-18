@@ -16,8 +16,7 @@ class Handler
 			@handleAPIEvent event, context
 
 	handleAPIEvent: (event, context) ->
-		input =
-			payload: event.payload
+		input = event.payload
 		generator = new Generator()
 		generator.generate input
 		generator.on 'finish', @handleAPISuccess({}, context)
