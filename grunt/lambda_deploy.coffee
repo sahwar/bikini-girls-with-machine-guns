@@ -4,18 +4,18 @@ module.exports =
 			region: 'eu-west-1'
 			aliases: 'development'
 			enableVersioning: false
-		arn: 'your_arn'
+		arn: '<lambdaArn>'
 
 	staging:
 		options:
 			region: 'eu-west-1'
 			aliases: 'staging'
 			enableVersioning: true
-		arn: 'your_arn'
+		arn: '<lambdaArn>'
 
 	production:
 		options:
 			region: 'eu-west-1'
 			aliases: 'production'
 			enableVersioning: true
-		arn: 'your_arn'
+		arn: '<lambdaArn>'

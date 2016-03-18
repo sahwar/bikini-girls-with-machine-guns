@@ -1,5 +1,5 @@
 {
-  "name": "busters",
+  "name": "bikini-girls-with-machine-guns",
   "version": "0.0.1",
   "description": "Load tester that utilizes a Lambda function with PhantomJS",
   "publishConfig": {
@@ -13,13 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/smalltownheroes/busters.git"
+    "url": "https://github.com/smalltownheroes/bikini-girls-with-machine-guns.git"
   },
   "author": "Small Town Heroes",
   "bugs": {
-    "url": "https://github.com/smalltownheroes/busters/issues"
+    "url": "https://github.com/smalltownheroes/bikini-girls-with-machine-guns/issues"
   },
-  "homepage": "https://github.com/smalltownheroes/busters",
+  "homepage": "https://github.com/smalltownheroes/bikini-girls-with-machine-guns",
   "private": true,
   "devDependencies": {
     "chai": "^3.5.0",

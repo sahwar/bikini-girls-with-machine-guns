@@ -43,13 +43,13 @@ class Girls extends EventEmitter
 				if cb?
 					cb err
 				else
-					log.debug err, 'Girls::error'
+					log.info err, 'Girls::error'
 					@emit 'error', err
 			else
 				if cb?
 					cb? null, result
 				else
-					log.debug result, 'Girls::success'
+					log.info result, 'Girls::success'
 					@emit 'finish', result
 
 	_generateResult: (input, cb) ->
@@ -73,7 +73,7 @@ class Girls extends EventEmitter
 		cb badRequest
 
 	_getPhantomFileName: (cb) ->
-		nodeModulesPath = path.join(__dirname, '../../node_modules')
+		nodeModulesPath = path.join(__dirname, '../../node_modules/phantomjs')
 		fs.exists nodeModulesPath, (exists) ->
 			if exists
 				cb null, path.join(__dirname, '../../node_modules','phantomjs', 'bin', 'phantomjs')
@@ -90,17 +90,21 @@ class Girls extends EventEmitter
 				success: ''
 				fail: ''
 			process.env['LD_WARN'] = true
-			process.env['LD_LIBRARY_PATH'] = __dirname
+			libraryPath = path.join(__dirname, '../..')
+			log.info libraryPath, 'Girls:: library path'
+			process.env['LD_LIBRARY_PATH'] = libraryPath
 			log.info input, 'Girls:: launching PhantomJS'
 			log.info phantomJsPath, 'Girls:: launching phantomjs location'
 			log.info childArgs, 'Girls:: launching args'
 			phantomProcess = childProcess.execFile(phantomJsPath, childArgs)
 			phantomProcess.stdout.on 'data', (data) ->
+				log.info "Girls::Received ok stuff from PhantomJS: #{data}"
 				if data?
 					# Yay, dirty hack because of https://github.com/ariya/phantomjs/issues/12697
 					output.success += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
 
 			phantomProcess.stderr.on 'data', (data) ->
+				log.info "Girls::Received fail stuff from PhantomJS: #{data}"
 				if data?
 					output.fail += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
 

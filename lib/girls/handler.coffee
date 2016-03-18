@@ -1,7 +1,7 @@
 _          = require 'lodash'
 AWS        = require 'aws-sdk'
 Dispatcher = require '../dispatcher'
-
+log        = require '../log'
 Generator  = require './'
 
 AWS.config.region = 'eu-west-1'
@@ -32,6 +32,7 @@ class Handler
 			context.succeed(result)
 
 	handleSNSEvent: (event, context) ->
+		log.info event.Records[0].Sns.Message, 'Girls::SNS message received'
 		snsMessage = JSON.parse(event.Records[0].Sns.Message)
 
 		generator = new Generator()
@@ -50,7 +51,7 @@ class Handler
 			dispatcher = new Dispatcher()
 			dispatcher.publishToTopic snsMessage.errorTopic, errorMessage, (err, data) ->
 				if err?
-					console.log(err.stack)
+					log.error err, "Girls::Error while publishing to topic #{snsMessage.errorTopic}"
 				context.fail(error)
 
 	handleSNSSuccess: (snsMessage, context) ->
@@ -64,7 +65,7 @@ class Handler
 			dispatcher = new Dispatcher()
 			dispatcher.publishToTopic snsMessage.successTopic, successMessage, (err, data) ->
 				if err?
-					console.log(err.stack)
+					log.error err, "Girls::Error while publishing to topic #{snsMessage.successTopic}"
 				context.succeed(result)
 
 module.exports = (event, context) ->
