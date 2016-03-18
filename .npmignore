@@ -1,0 +1,5 @@
+Gruntfile.coffee
+dist
+report
+screenshots
+git-hooks

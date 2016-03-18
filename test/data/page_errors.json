@@ -1,0 +1,15 @@
+{
+	"url": "http://www.scnsrc.me",
+	"screenshots": {
+		"args": {
+			"format": "jpeg",
+			"quality": "25"
+		},
+		"error": true
+	},
+	"viewport": {
+		"width": 500,
+		"height": 500
+	},
+	"har": false
+}

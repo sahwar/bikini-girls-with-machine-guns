@@ -1,0 +1,15 @@
+{
+	"url": "http://www.google.com",
+	"screenshots": {
+		"args": {
+			"format": "jpeg",
+			"quality": "25"
+		},
+		"success": true
+	},
+	"viewport": {
+		"width": 920,
+		"height": 580
+	},
+	"har": true
+}

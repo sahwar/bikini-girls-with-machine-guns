@@ -1,0 +1,35 @@
+{
+    "Records": [
+        {
+            "EventSource": "aws:sns",
+            "EventVersion": "1.0",
+            "EventSubscriptionArn": "arn:aws:sns:eu-west-1:110440800955:seamly-busters-request-development:3f767368-c9fa-48f9-a1ae-85d7870456c8",
+            "Sns": {
+                "Type": "Notification",
+                "MessageId": "9cbb8efb-a5be-5ff2-bb08-c1d7bab6cfd6",
+                "TopicArn": "arn:aws:sns:eu-west-1:110440800955:seamly-busters-request-development",
+                "Subject": null,
+                "Message": "{\"payload\":{\"url\":\"http://www.google.com\",\"screenshots\":{\"args\":{\"format\":\"jpeg\",\"quality\":\"25\"},\"success\":true},\"viewport\":{\"width\":920,\"height\":580},\"har\":true},\"successTopic\":\"arn:aws:sns:eu-west-1:110440800955:seamly-busters-success-development\",\"errorTopic\":\"arn:aws:sns:eu-west-1:110440800955:seamly-busters-error-development\"}",
+                "Timestamp": "2016-02-03T15:29:12.515Z",
+                "SignatureVersion": "1",
+                "Signature": "TA9nk9OQQZLt41dMcKvs+fmBCqQ6JbZkhJTIiOgOwEzeUmzCmpnm7heENnp5GbgvRojcMeWxV0FxobU2FW1OPJkhv930RaNSWrBW33rh9qYmYuQdM09VDSUx0haE9oEgY5YgvmkhJRI9UgrRNUkRpNrEUY2IMFrTTDiZoF8OxUDLgCXJFSSTOW6BrC8DTQtxD+EEmJd9AU1JvKNMNDAsqDn9JS2b9/7oAjuwxj4opnWS0sysfU9zbLSu0HCTecq8d+KKuMkhnzToIdECQZg4TQbV35x+5DUh0sbfmZAyGunHhhcdWh9gfMJr/hACUHLF6vU9TbXwMtULQnWNuGZKYw==",
+                "SigningCertUrl": "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-bb750dd426d95ee9390147a5624348ee.pem",
+                "UnsubscribeUrl": "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:110440800955:seamly-busters-request-development:3f767368-c9fa-48f9-a1ae-85d7870456c8",
+                "MessageAttributes": {
+                    "AWS.SNS.MOBILE.MPNS.Type": {
+                        "Type": "String",
+                        "Value": "token"
+                    },
+                    "AWS.SNS.MOBILE.MPNS.NotificationClass": {
+                        "Type": "String",
+                        "Value": "realtime"
+                    },
+                    "AWS.SNS.MOBILE.WNS.Type": {
+                        "Type": "String",
+                        "Value": "wns/badge"
+                    }
+                }
+            }
+        }
+    ]
+}

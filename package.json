@@ -1,0 +1,50 @@
+{
+  "name": "busters",
+  "version": "0.0.1",
+  "description": "Load tester that utilizes a Lambda function with PhantomJS",
+  "publishConfig": {
+    "registry": "https://npm.smalltownheroes.be/"
+  },
+  "main": "index",
+  "scripts": {
+    "start": "./node_modules/.bin/coffee index.coffee",
+    "test": "NODE_ENV=test grunt test",
+    "postinstall": "./scripts/postinstall.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smalltownheroes/busters.git"
+  },
+  "author": "Small Town Heroes",
+  "bugs": {
+    "url": "https://github.com/smalltownheroes/busters/issues"
+  },
+  "homepage": "https://github.com/smalltownheroes/busters",
+  "private": true,
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coffeelint": "^1.15.0",
+    "express": "^4.13.4",
+    "grunt": "^0.4.5",
+    "grunt-aws-lambda": "^0.12.0",
+    "grunt-coffeelint": "0.0.15",
+    "grunt-mocha-test": "^0.12.7",
+    "load-grunt-config": "^0.19.1",
+    "mocha": "^2.4.5",
+    "phantomjs": "^1.9.7",
+    "supertest": "^1.2.0"
+  },
+  "dependencies": {
+    "async": "1.5.2",
+    "aws-sdk": "2.2.32",
+    "body-parser": "1.14.2",
+    "bunyan": "1.5.1",
+    "coffee-script": "1.10.0",
+    "joi": "6.6.1",
+    "lodash": "4.5.1",
+    "moment": "^2.12.0",
+    "node-uuid": "1.4.7",
+    "rimraf": "2.5.2",
+    "sqs-consumer": "^3.1.2"
+  }
+}
