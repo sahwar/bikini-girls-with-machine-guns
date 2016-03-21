@@ -13,7 +13,12 @@ inputSchema = Joi.object().keys(
 		).optional()
 		success: Joi.boolean().optional()
 		error: Joi.boolean().optional()
+		s3: Joi.object().keys(
+			bucket: Joi.string().required()
+			directory: Joi.string().required()
+		).required()
 	).optional()
+	settings: Joi.object().optional()
 	har: Joi.boolean().required()
 )
 

@@ -119,6 +119,8 @@ timer = new Timer()
 page = webpage.create()
 if input.viewport?
 	page.viewportSize = input.viewport
+if input.settings?
+	page.settings = input.settings
 page.onLoadStarted = ->
 	timer.start()
 page.onError = (message, trace) ->
@@ -147,20 +149,24 @@ page.open(input.url, (status) ->
 		if input.screenshots?
 			setTimeout ->
 				if input.screenshots.success
-					result.screenshot.success = "screenshots/success-#{uuid.v4()}.png"
 					if input.screenshots.args?
-						page.render(result.screenshot.success, input.screenshots.args)
+						extension = input.screenshots.args.format
+						result.screenshot = "screenshots/success-#{uuid.v4()}.#{extension}"
+						page.render(result.screenshot, input.screenshots.args)
 					else
-						page.render(result.screenshot.success)
+						result.screenshot = "screenshots/success-#{uuid.v4()}.png"
+						page.render(result.screenshot)
 				if input.screenshots.error and result.pageErrors.length
-					result.screenshot.error = "screenshots/error-#{uuid.v4()}.png"
 					if input.screenshots.args?
-						page.render(result.screenshot.error, input.screenshots.args)
+						extension = input.screenshots.args.format
+						result.screenshot = "screenshots/error-#{uuid.v4()}.#{extension}"
+						page.render(result.screenshot, input.screenshots.args)
 					else
-						page.render(result.screenshot.error)
+						result.screenshot = "screenshots/error-#{uuid.v4()}.png"
+						page.render(result.screenshot)
 				console.log JSON.stringify(result)
 				phantom.exit()
-			, 300
+			, 10
 		else
 			console.log JSON.stringify(result)
 			phantom.exit()

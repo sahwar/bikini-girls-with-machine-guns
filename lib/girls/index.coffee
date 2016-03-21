@@ -8,12 +8,14 @@ fs             = require 'fs'
 childProcess   = require 'child_process'
 
 schema         = require './schema'
+S3Store        = require '../s3'
 log            = require '../log'
 
 class Girls extends EventEmitter
 
 	constructor: (options) ->
 		super
+		@s3Store = new S3Store()
 
 	generatePromise: (input) ->
 		p = new Promise (resolve, reject) =>
@@ -81,14 +83,14 @@ class Girls extends EventEmitter
 				cb null, path.join(__dirname, '../../phantomjs')
 
 	_callPhantom: (input, cb) ->
-		@_getPhantomFileName((err, phantomJsPath) ->
+		@_getPhantomFileName (err, phantomJsPath) =>
 			childArgs = [
 				path.join(__dirname, '../phantomjs/phantom.js')
 				JSON.stringify(input)
 			]
 			output =
 				success: ''
-				fail: ''
+				error: ''
 			process.env['LD_WARN'] = true
 			libraryPath = path.join(__dirname, '../..')
 			log.info libraryPath, 'Girls:: library path'
@@ -96,7 +98,9 @@ class Girls extends EventEmitter
 			log.info input, 'Girls:: launching PhantomJS'
 			log.info phantomJsPath, 'Girls:: launching phantomjs location'
 			log.info childArgs, 'Girls:: launching args'
-			phantomProcess = childProcess.execFile(phantomJsPath, childArgs)
+			options =
+				maxBuffer: 1024 * 1024
+			phantomProcess = childProcess.execFile(phantomJsPath, childArgs, options)
 			phantomProcess.stdout.on 'data', (data) ->
 				log.info "Girls::Received ok stuff from PhantomJS: #{data}"
 				if data?
@@ -106,28 +110,50 @@ class Girls extends EventEmitter
 			phantomProcess.stderr.on 'data', (data) ->
 				log.info "Girls::Received fail stuff from PhantomJS: #{data}"
 				if data?
-					output.fail += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
+					output.error += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
 
-			phantomProcess.on 'exit', (code) ->
+			phantomProcess.on 'exit', (code) =>
 				if !!output.success
 					try
 						output.success = JSON.parse(output.success)
+						output.error = {}
+						@_uploadScreenshot input, output, 'success', cb
 					catch e
 						log.error output.success
 						log.error e, 'Failed parsing result from PhantomJS'
+						output.success = "Failed parsing result from PhantomJS"
+						output.error = {}
+						cb null, output
+				else if !!output.error
+					try
+						output.error = JSON.parse(output.error)
 						output.success = {}
+						@_uploadScreenshot input, output, 'error', cb
+					catch e
+						log.error output.error
+						log.error e, 'Failed parsing result from PhantomJS'
+						output.error = "Failed parsing result from PhantomJS"
+						output.success = {}
+						cb null, output
 				else
 					output.success = {}
-				if !!output.fail
-					try
-						output.fail = JSON.parse(output.fail)
-					catch e
-						log.error output.fail
-						log.error e, 'Failed parsing result from PhantomJS'
-						output.fail = {}
+					output.error = {}
+					cb null, output
+
+	_uploadScreenshot: (input, output, type, cb) ->
+		if input.screenshots?
+			mimetype = 'image/png'
+			if input.screenshots?.args?.format?
+				mimetype = "image/#{input.screenshots.args.format}"
+			@s3Store.upload input.screenshots.s3.bucket, output[type].screenshot, input.screenshots.s3.directory, mimetype, (err, s3Url) ->
+				if err?
+					log.error err, "Failed uploading #{output[type].screenshot} to S3 bucket #{input.screenshots.s3.bucket}"
+					output[type].screenshot = "Failed uploading #{output[type].screenshot} to S3 bucket #{input.screenshots.s3.bucket}"
 				else
-					output.fail = {}
+					output[type].screenshot = s3Url
 				cb null, output
-		)
+		else
+			cb null, output
+
 
 module.exports = Girls

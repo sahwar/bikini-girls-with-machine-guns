@@ -2,10 +2,13 @@
 	"url": "http://www.scnsrc.me",
 	"screenshots": {
 		"args": {
-			"format": "jpeg",
-			"quality": "25"
+			"format": "png"
 		},
-		"error": true
+		"error": true,
+		"s3": {
+			"bucket": "<your-bucket>",
+			"directory": "bgwmg"
+		}
 	},
 	"viewport": {
 		"width": 500,
