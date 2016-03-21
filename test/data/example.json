@@ -8,7 +8,7 @@
 		"success": true,
 		"error": true,
 		"s3": {
-			"bucket": "ibc-content",
+			"bucket": "<your-bucket>",
 			"directory": "bgwmg"
 		}
 	},

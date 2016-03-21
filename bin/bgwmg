@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+require('coffee-script/register');
+
+var program = require('commander');
+var path    = require('path');
+var mkdirp  = require('mkdirp');
+var Trigger = require('../lib/trigger');
+
+// options
+program
+  .option('-e, --endpoint <url>', 'specify the AWS API Gateway url (required)')
+  .option('-k, --api_key <string>', 'your AWS API Gateway key (required)')
+  .option('-f, --file <path>', 'specify the JSON file with the requests to fire [./load.json]', path.join(__dirname, './load.json'))
+  .option('-c, --request_count <number>', 'specify the count of the requests to fire [10]', '10')
+  .option('-l, --concurrent_limit <number>', 'specify the concurrent limit of the requests [10]', '10')
+  .option('-d, --dump <path>', 'specify the dump directory')
+  .parse(process.argv);
+
+if (program.dump) {
+	mkdirp(program.dump, function(err) {
+		if (err) {
+			console.error(err)
+		} else {
+			trigger = new Trigger(program);
+			trigger.fire(function(err, result) {
+				if(err) {
+					console.error(err);
+				} else {
+					console.log(result);
+				}
+			});
+		}
+	});
+} else {
+	trigger = new Trigger(program);
+	trigger.fire(function(err, result) {
+		if(err) {
+			console.error(err);
+		} else {
+			console.log(result);
+		}
+	});
+}
+

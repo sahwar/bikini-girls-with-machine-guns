@@ -4,11 +4,11 @@ node_modules
 
 report
 
-screenshots
-
 public
 
 uploads
+
+bin/load.json
 
 dist
 
