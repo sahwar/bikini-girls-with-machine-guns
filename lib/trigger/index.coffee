@@ -14,8 +14,12 @@ class Trigger
 
 	fire: (cb) ->
 		girls = @castGirls @options.request_count
-		async.mapLimit girls, @options.concurrent_limit, (girl, callb) =>
+		concurrentLimit = parseInt(@options.concurrent_limit, 10)
+		reqPool =
+			maxSockets: concurrentLimit
+		async.mapLimit girls, concurrentLimit, (girl, callb) =>
 			request
+				pool: reqPool
 				url: @options.endpoint
 				method: 'POST'
 				headers:
