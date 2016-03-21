@@ -135,6 +135,14 @@ page.onResourceReceived = (response) ->
 	if response.stage is 'end'
 		timer.replyEnd response
 
+page.onNavigationRequested = (url, type, willNavigate, main) ->
+	if main and url isnt input.url
+		result.redirect =
+			url: url
+			type: type
+			willNavigate: willNavigate
+			main: main
+
 page.open(input.url, (status) ->
 	result.status = status
 	if status isnt 'success'
@@ -151,18 +159,18 @@ page.open(input.url, (status) ->
 				if input.screenshots.success
 					if input.screenshots.args?
 						extension = input.screenshots.args.format
-						result.screenshot = "screenshots/success-#{uuid.v4()}.#{extension}"
+						result.screenshot = "/tmp/screenshots/success-#{uuid.v4()}.#{extension}"
 						page.render(result.screenshot, input.screenshots.args)
 					else
-						result.screenshot = "screenshots/success-#{uuid.v4()}.png"
+						result.screenshot = "/tmp/screenshots/success-#{uuid.v4()}.png"
 						page.render(result.screenshot)
 				if input.screenshots.error and result.pageErrors.length
 					if input.screenshots.args?
 						extension = input.screenshots.args.format
-						result.screenshot = "screenshots/error-#{uuid.v4()}.#{extension}"
+						result.screenshot = "/tmp/screenshots/error-#{uuid.v4()}.#{extension}"
 						page.render(result.screenshot, input.screenshots.args)
 					else
-						result.screenshot = "screenshots/error-#{uuid.v4()}.png"
+						result.screenshot = "/tmp/screenshots/error-#{uuid.v4()}.png"
 						page.render(result.screenshot)
 				console.log JSON.stringify(result)
 				phantom.exit()

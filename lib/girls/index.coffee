@@ -141,19 +141,39 @@ class Girls extends EventEmitter
 					cb null, output
 
 	_uploadScreenshot: (input, output, type, cb) ->
-		if input.screenshots?
-			mimetype = 'image/png'
-			if input.screenshots?.args?.format?
-				mimetype = "image/#{input.screenshots.args.format}"
-			@s3Store.upload input.screenshots.s3.bucket, output[type].screenshot, input.screenshots.s3.directory, mimetype, (err, s3Url) ->
-				if err?
-					log.error err, "Failed uploading #{output[type].screenshot} to S3 bucket #{input.screenshots.s3.bucket}"
-					output[type].screenshot = "Failed uploading #{output[type].screenshot} to S3 bucket #{input.screenshots.s3.bucket}"
-				else
-					output[type].screenshot = s3Url
-				cb null, output
-		else
-			cb null, output
+		work = []
+		work.push (callb) =>
+			@_statDir path.join('/tmp/screenshots'), callb
+		work.push (callb) =>
+			@_statDir path.join(__dirname, '../phantomjs'), callb
+		work.push (callb) =>
+			@_statDir path.join(__dirname, '../../screenshots'), callb
+		work.push (callb) =>
+			if input.screenshots? and _.isString(output[type]?.screenshot)
+				mimetype = 'image/png'
+				if input.screenshots?.args?.format?
+					mimetype = "image/#{input.screenshots.args.format}"
+				screenshot = output[type].screenshot
+				@s3Store.upload input.screenshots.s3.bucket, screenshot, input.screenshots.s3.directory, mimetype, (err, s3Url) ->
+					if err?
+						log.error err, "Failed uploading #{screenshot} to S3 bucket #{input.screenshots.s3.bucket}/#{input.screenshots.s3.directory}"
+						output[type].screenshot = "Failed uploading #{screenshot} to S3 bucket #{input.screenshots.s3.bucket}/#{input.screenshots.s3.directory}"
+					else
+						output[type].screenshot = s3Url
+					callb null, output
+			else
+				callb null, output
+		async.waterfall work, (err, result) ->
+			cb null, result
 
+	_statDir: (dir, cb) ->
+		log.info "Stating directory #{dir}"
+		fs.readdir(dir, (err, stats) ->
+			if err?
+				log.error err, "Failed stating #{dir}"
+			else
+				log.warn stats, "Stats of #{dir}"
+			cb()
+		)
 
 module.exports = Girls

@@ -1,5 +1,5 @@
 {
-	"url": "http://www.google.be/",
+	"url": "http://thepassion2015-release.smalltownheroes.be",
 	"screenshots": {
 		"args": {
 			"format": "jpeg",
@@ -8,7 +8,7 @@
 		"success": true,
 		"error": true,
 		"s3": {
-			"bucket": "<your-bucket>",
+			"bucket": "ibc-content",
 			"directory": "bgwmg"
 		}
 	},
@@ -19,7 +19,8 @@
 	"settings": {
 		"loadImages": true,
 		"userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
-		"resourceTimeout": 1000
+		"resourceTimeout": 2000,
+		"javascriptEnabled": true
 	},
 	"har": true
 }
