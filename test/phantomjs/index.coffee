@@ -1,12 +1,12 @@
-Busters = require '../'
+Bgwmg = require '../..'
 
-describe "Bikini Girls With Machine Guns", ->
+describe "Bikini Girls With Machine Guns - PhantomJS", ->
 
 	@timeout 100000
 
 	it 'load tests successfully on known url fetch', (done) ->
 		input = require './data/example.json'
-		generator = new Busters()
+		generator = new Bgwmg()
 		generator.generate input
 		generator.on 'error', done
 		generator.on 'finish', (results) ->
@@ -19,7 +19,7 @@ describe "Bikini Girls With Machine Guns", ->
 
 	it 'load tests successfully on known url fetch but has pageErrors', (done) ->
 		input = require './data/page_errors.json'
-		generator = new Busters()
+		generator = new Bgwmg()
 		generator.generate input
 		generator.on 'error', done
 		generator.on 'finish', (results) ->
@@ -32,7 +32,7 @@ describe "Bikini Girls With Machine Guns", ->
 
 	it 'fails on unknown url fetch', (done) ->
 		input = require './data/fail.json'
-		generator = new Busters()
+		generator = new Bgwmg()
 		generator.generate input
 		generator.on 'error', done
 		generator.on 'finish', (results) ->

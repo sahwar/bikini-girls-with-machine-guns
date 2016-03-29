@@ -2,9 +2,6 @@
   "name": "bikini-girls-with-machine-guns",
   "version": "0.0.1",
   "description": "Load tester that utilizes a Lambda function with PhantomJS",
-  "publishConfig": {
-    "registry": "https://npm.smalltownheroes.be/"
-  },
   "main": "index",
   "scripts": {
     "start": "./node_modules/.bin/coffee index.coffee",
@@ -46,6 +43,7 @@
     "coffee-script": "1.10.0",
     "joi": "6.6.1",
     "lodash": "4.5.1",
+    "milk": "^1.2.0",
     "moment": "^2.12.0",
     "node-uuid": "1.4.7",
     "rimraf": "2.5.2",

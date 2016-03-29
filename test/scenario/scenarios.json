@@ -1,0 +1,65 @@
+{
+	"type": "parallel",
+	"scenarios": [
+		{
+			"name": "Scenario one",
+			"config": {
+				"pool": 2,
+				"runs": 2,
+				"concurrency": 1
+			},
+			"steps": [
+				{
+					"url": "http://www.thepassion.nl/getuploadurl",
+					"method": "post",
+					"headers": {
+						"Accept": "application/json",
+						"User-Agent": "Loadscript"
+					},
+					"body": {
+						"name": "Benoit Shapiro",
+						"text": "Ik loop mee omdat ik dan de release omgeving kan DoS-attacken",
+						"background": "4",
+						"extension": "jpg"
+					},
+					"expect": 200,
+					"captures": [
+						{
+							"at": ".",
+							"as": "upload"
+						}
+					]
+				},
+				{
+					"url": "{{upload.uploadUrl}}",
+					"method": "put",
+					"headers": {
+						"Content-Type": "{{upload.contentType}}",
+						"Cache-Control": "max-age=86400000",
+						"Content-Length": ""
+					},
+					"file": "https://s3-eu-west-1.amazonaws.com/thepassion2015-cdn.smalltownheroes.be/thepassion2016/production/getuigenissen/uploads/a745789f-7125-40ce-b5c8-79fb5a4ed7f7.jpg",
+					"expect": 200
+				},
+				{
+					"poll": {
+						"interval": 1000,
+						"until": "{{response}}"
+					},
+					"url": "http://www.thepassion.nl/api/v1/storyline/getuigenissen_by_id/{{upload.uploadId}}",
+					"method": "get",
+					"qs": {
+						"_": "{{moment().valueOf()}}"
+					},
+					"expect": 200,
+					"capture": [
+						{
+							"at": ".",
+							"as": "response"
+						}
+					]
+				}
+			]
+		}
+	]
+}

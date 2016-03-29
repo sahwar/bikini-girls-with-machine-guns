@@ -38,7 +38,6 @@ class Girls extends EventEmitter
 		work.push (callb) =>
 			@_validate input, callb
 		work.push (callb) =>
-			log.info input, 'Girls::request'
 			@_generateResult input, callb
 		async.waterfall work, (err, result) =>
 			if err?
@@ -51,7 +50,7 @@ class Girls extends EventEmitter
 				if cb?
 					cb? null, result
 				else
-					log.info result, 'Girls::success'
+					# log.info result, 'Girls::success'
 					@emit 'finish', result
 
 	_generateResult: (input, cb) ->
@@ -93,22 +92,16 @@ class Girls extends EventEmitter
 				error: ''
 			process.env['LD_WARN'] = true
 			libraryPath = path.join(__dirname, '../..')
-			log.info libraryPath, 'Girls:: library path'
 			process.env['LD_LIBRARY_PATH'] = libraryPath
-			log.info input, 'Girls:: launching PhantomJS'
-			log.info phantomJsPath, 'Girls:: launching phantomjs location'
-			log.info childArgs, 'Girls:: launching args'
 			options =
 				maxBuffer: 1024 * 1024
 			phantomProcess = childProcess.execFile(phantomJsPath, childArgs, options)
 			phantomProcess.stdout.on 'data', (data) ->
-				log.info "Girls::Received ok stuff from PhantomJS: #{data}"
 				if data?
 					# Yay, dirty hack because of https://github.com/ariya/phantomjs/issues/12697
 					output.success += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
 
 			phantomProcess.stderr.on 'data', (data) ->
-				log.info "Girls::Received fail stuff from PhantomJS: #{data}"
 				if data?
 					output.error += data.replace(new RegExp('Unsafe JavaScript attempt to access frame with URL.*','g'), '').trim()
 
@@ -119,8 +112,6 @@ class Girls extends EventEmitter
 						output.error = {}
 						@_uploadScreenshot input, output, 'success', cb
 					catch e
-						log.error output.success
-						log.error e, 'Failed parsing result from PhantomJS'
 						output.success = "Failed parsing result from PhantomJS"
 						output.error = {}
 						cb null, output
@@ -130,8 +121,6 @@ class Girls extends EventEmitter
 						output.success = {}
 						@_uploadScreenshot input, output, 'error', cb
 					catch e
-						log.error output.error
-						log.error e, 'Failed parsing result from PhantomJS'
 						output.error = "Failed parsing result from PhantomJS"
 						output.success = {}
 						cb null, output
@@ -143,12 +132,6 @@ class Girls extends EventEmitter
 	_uploadScreenshot: (input, output, type, cb) ->
 		work = []
 		work.push (callb) =>
-			@_statDir path.join('/tmp/screenshots'), callb
-		work.push (callb) =>
-			@_statDir path.join(__dirname, '../phantomjs'), callb
-		work.push (callb) =>
-			@_statDir path.join(__dirname, '../../screenshots'), callb
-		work.push (callb) =>
 			if input.screenshots? and _.isString(output[type]?.screenshot)
 				mimetype = 'image/png'
 				if input.screenshots?.args?.format?
@@ -156,7 +139,6 @@ class Girls extends EventEmitter
 				screenshot = output[type].screenshot
 				@s3Store.upload input.screenshots.s3.bucket, screenshot, input.screenshots.s3.directory, mimetype, (err, s3Url) ->
 					if err?
-						log.error err, "Failed uploading #{screenshot} to S3 bucket #{input.screenshots.s3.bucket}/#{input.screenshots.s3.directory}"
 						output[type].screenshot = "Failed uploading #{screenshot} to S3 bucket #{input.screenshots.s3.bucket}/#{input.screenshots.s3.directory}"
 					else
 						output[type].screenshot = s3Url
@@ -165,15 +147,5 @@ class Girls extends EventEmitter
 				callb null, output
 		async.waterfall work, (err, result) ->
 			cb null, result
-
-	_statDir: (dir, cb) ->
-		log.info "Stating directory #{dir}"
-		fs.readdir(dir, (err, stats) ->
-			if err?
-				log.error err, "Failed stating #{dir}"
-			else
-				log.warn stats, "Stats of #{dir}"
-			cb()
-		)
 
 module.exports = Girls

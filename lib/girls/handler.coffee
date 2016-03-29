@@ -16,6 +16,7 @@ class Handler
 			@handleAPIEvent event, context
 
 	handleAPIEvent: (event, context) ->
+		log.info event, 'Girls::API request received'
 		input = event.payload
 		generator = new Generator()
 		generator.generate input
@@ -24,6 +25,7 @@ class Handler
 
 	handleAPIError: (message, context) ->
 		(error) ->
+			log.error error, 'Girls::API failed'
 			context.fail(error)
 
 	handleAPISuccess: (message, context) ->

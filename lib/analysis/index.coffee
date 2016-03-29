@@ -1,0 +1,1 @@
+module.exports.har = require '.har'
