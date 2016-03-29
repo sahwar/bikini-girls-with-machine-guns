@@ -42,7 +42,7 @@ class HarAnalysis
 
 	sampleResources: (entries) ->
 		result = []
-		async.map entries, (entry, callb) =>
+		async.map entries, (entry, callb) ->
 			resource =
 				url: entry.request?.url
 				start: entry.startedDateTime
@@ -105,9 +105,12 @@ module.exports = HarAnalysis
  #    			a + m/p.length;
 	# 		, 0).value()
 	# 		long = averageResource > 2000
-	# 		if long and not (_.includes(resource.url, 'facebook.com') or _.includes(resource.url, 'twitter.com') or _.includes(resource.url, 'google-analytics.com') or _.includes(resource.url, 'pusher.com'))
+	# 		if long and not (_.includes(resource.url, 'facebook.com')
+	# 			or _.includes(resource.url, 'twitter.com') or _.includes(resource.url, 'google-analytics.com')
+	# 			or _.includes(resource.url, 'pusher.com'))
 	# 			console.log '--------------->', resource
-	# 		long and not (_.includes(resource.url, 'facebook.com') or _.includes(resource.url, 'twitter.com') or _.includes(resource.url, 'google-analytics.com') or _.includes(resource.url, 'pusher.com'))
+	# 		long and not (_.includes(resource.url, 'facebook.com') or _.includes(resource.url, 'twitter.com')
+	# 			or _.includes(resource.url, 'google-analytics.com') or _.includes(resource.url, 'pusher.com'))
 	# 	)
 	# 	.map((resource) ->
 	# 		resource.url
